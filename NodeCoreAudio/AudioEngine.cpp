@@ -121,7 +121,7 @@ Audio::AudioEngine::AudioEngine( Local<Object> options ) :
 
 //////////////////////////////////////////////////////////////////////////////
 /*! Gets options */
-v8::Handle<v8::Value> Audio::AudioEngine::getOptions(const v8::Arguments& args){
+void Audio::AudioEngine::getOptions(const Nan::FunctionCallbackInfo<Value>& args){
 //NAN_METHOD(Audio::AudioEngine::getOptions){
     Nan::HandleScope();
     //NanScope();
@@ -132,18 +132,18 @@ v8::Handle<v8::Value> Audio::AudioEngine::getOptions(const v8::Arguments& args){
 
 	AudioEngine* pEngine = AudioEngine::Unwrap<AudioEngine>( args.This() );
 
-	options->Set( Nan::New<String>("inputChannels"), Nan::New<Number>(pEngine->m_uInputChannels) );
-	options->Set( Nan::New<String>("outputChannels"), Nan::New<Number>(pEngine->m_uOutputChannels) );
+	Nan::Set( options, Nan::New<String>("inputChannels").ToLocalChecked(), Nan::New<Number>(pEngine->m_uInputChannels) );
+	Nan::Set( options, Nan::New<String>("outputChannels").ToLocalChecked(), Nan::New<Number>(pEngine->m_uOutputChannels) );
 
-	options->Set( Nan::New<String>("inputDevice"), Nan::New<Number>(pEngine->m_uInputDevice) );
-	options->Set( Nan::New<String>("outputDevice"), Nan::New<Number>(pEngine->m_uOutputDevice) );
+	Nan::Set( options, Nan::New<String>("inputDevice").ToLocalChecked(), Nan::New<Number>(pEngine->m_uInputDevice) );
+	Nan::Set( options, Nan::New<String>("outputDevice").ToLocalChecked(), Nan::New<Number>(pEngine->m_uOutputDevice) );
 
-	options->Set( Nan::New<String>("sampleRate"), Nan::New<Number>(pEngine->m_uSampleRate) );
-	options->Set( Nan::New<String>("sampleFormat"), Nan::New<Number>(pEngine->m_uSampleFormat) );
-	options->Set( Nan::New<String>("framesPerBuffer"), Nan::New<Number>(pEngine->m_uSamplesPerBuffer) );
-	options->Set( Nan::New<String>("numBuffers"), Nan::New<Number>(pEngine->m_uNumBuffers) );
-	options->Set( Nan::New<String>("interleaved"), Nan::New<Boolean>(pEngine->m_bInterleaved) );
-	options->Set( Nan::New<String>("useMicrophone"), Nan::New<Boolean>(pEngine->m_bReadMicrophone) );
+	Nan::Set( options, Nan::New<String>("sampleRate").ToLocalChecked(), Nan::New<Number>(pEngine->m_uSampleRate) );
+	Nan::Set( options, Nan::New<String>("sampleFormat").ToLocalChecked(), Nan::New<Number>(pEngine->m_uSampleFormat) );
+	Nan::Set( options, Nan::New<String>("framesPerBuffer").ToLocalChecked(), Nan::New<Number>(pEngine->m_uSamplesPerBuffer) );
+	Nan::Set( options, Nan::New<String>("numBuffers").ToLocalChecked(), Nan::New<Number>(pEngine->m_uNumBuffers) );
+	Nan::Set( options, Nan::New<String>("interleaved").ToLocalChecked(), Nan::New<Boolean>(pEngine->m_bInterleaved) );
+	Nan::Set( options, Nan::New<String>("useMicrophone").ToLocalChecked(), Nan::New<Boolean>(pEngine->m_bReadMicrophone) );
 
 	NanReturnValue(options);
 } // end GetOptions
