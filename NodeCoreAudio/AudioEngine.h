@@ -22,7 +22,7 @@ namespace Audio {
 
 	//////////////////////////////////////////////////////////////////////////
 	//! Core audio functionality
-	class AudioEngine : public node::ObjectWrap {
+	class AudioEngine : public Nan::ObjectWrap {
 	public:
 
 		AudioEngine( Local<Object> options );
@@ -30,7 +30,7 @@ namespace Audio {
 		//! Initialize our node object
 		static void Init(v8::Handle<v8::Object> target);
 		//! Create a new instance of the audio engine
-		//static v8::Handle<v8::Value> NewInstance(const v8::Arguments& args);
+		//static v8::Handle<v8::Value> NewInstance(const v8::Arguments& info);
         static NAN_METHOD(NewInstance);
 
 		Isolate* GetIsolate() { return m_pIsolate; }
@@ -42,33 +42,33 @@ namespace Audio {
 		~AudioEngine();		//!< OOL Destructor
 
 	private:
-		static v8::Persistent<v8::Function> constructor;
-		//static v8::Handle<v8::Value> New( const v8::Arguments& args );	//!< Create a v8 object
+		static Nan::Persistent<v8::Function> constructor;
+		//static v8::Handle<v8::Value> New( const v8::Arguments& info );	//!< Create a v8 object
         static NAN_METHOD(New);
 
 		//! Returns whether the PortAudio stream is active
-		//static v8::Handle<v8::Value> isActive( const v8::Arguments& args );
+		//static v8::Handle<v8::Value> isActive( const v8::Arguments& info );
         static NAN_METHOD(isActive);
 		//! Get the name of an audio device with a given ID number
-		//static v8::Handle<v8::Value> getDeviceName( const v8::Arguments& args );
+		//static v8::Handle<v8::Value> getDeviceName( const v8::Arguments& info );
         static NAN_METHOD(getDeviceName);
 		//! Get the number of available devices
-		//static v8::Handle<v8::Value> getNumDevices( const v8::Arguments& args );
+		//static v8::Handle<v8::Value> getNumDevices( const v8::Arguments& info );
         static NAN_METHOD(getNumDevices);
 
 		//! Closes and reopens the PortAudio stream
 		void restartStream();
 
-		//static v8::Handle<v8::Value> write( const v8::Arguments& args );		//!< Write samples to the current audio device
+		//static v8::Handle<v8::Value> write( const v8::Arguments& info );		//!< Write samples to the current audio device
         static NAN_METHOD(write);
-		//static v8::Handle<v8::Value> read( const v8::Arguments& args );			//!< Read samples from the current audio device
+		//static v8::Handle<v8::Value> read( const v8::Arguments& info );			//!< Read samples from the current audio device
         static NAN_METHOD(read);
-		//static v8::Handle<v8::Value> isBufferEmpty( const v8::Arguments& args );	//!< Returns whether the data buffer is empty
+		//static v8::Handle<v8::Value> isBufferEmpty( const v8::Arguments& info );	//!< Returns whether the data buffer is empty
         static NAN_METHOD(isBufferEmpty);
 
-		//static v8::Handle<v8::Value> setOptions( const v8::Arguments& args );	//!< Set options, restarts audio stream
+		//static v8::Handle<v8::Value> setOptions( const v8::Arguments& info );	//!< Set options, restarts audio stream
         static NAN_METHOD(setOptions);
-		//static v8::Handle<v8::Value> getOptions( const v8::Arguments& args );	//!< Gets options
+		//static v8::Handle<v8::Value> getOptions( const v8::Arguments& info );	//!< Gets options
         static NAN_METHOD(getOptions);
 
 		static void afterWork(uv_work_t* handle, int status) {};
@@ -79,14 +79,14 @@ namespace Audio {
 		void queueOutputBuffer( Handle<Array> result );			//!< Queues up an array to be sent to the sound card
 		void setSample( int position, Handle<Value> sample );	//!< Sets a sample in the queued output buffer
 
-		Handle<Array> getInputBuffer();							//!< Returns a v8 array filled with input samples
-		Handle<Number> getSample( int position );				//!< Returns a sound card sample converted to a v8 Number
+		Local<Array> getInputBuffer();							//!< Returns a v8 array filled with input samples
+		Local<Number> getSample( int position );				//!< Returns a sound card sample converted to a v8 Number
 
 		PaStream *m_pPaStream;				//!< The PortAudio stream object
 		PaStreamParameters m_inputParams,	//!< PortAudio stream parameters
 						   m_outputParams;
 
-		Handle<Array> m_hInputBuffer;		//!< Our pre-allocated input buffer
+		Local<Array> m_hInputBuffer;		//!< Our pre-allocated input buffer
 
 		uv_thread_t ptStreamThread,			//!< Our stream thread
 					jsAudioThread;			//!< Our JavaScript Audio thread

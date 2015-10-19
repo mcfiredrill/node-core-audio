@@ -14,31 +14,31 @@ using namespace v8;
 #include <stdio.h>
 
 /*
-//Handle<Value> CreateEngine(const Arguments& args) 
+//Handle<Value> CreateEngine(const Arguments& info) 
 NAN_METHOD(CreateEngine)
 {
     //HandleScope scope;
-    NanScope();
-    //return scope.Close( Audio::AudioEngine::NewInstance(args) );
-    NanReturnValue(Audio::AudioEngine::NewInstance(args));
+    Nan::HandleScope scope;
+    //return scope.Close( Audio::AudioEngine::NewInstance(info) );
+    info.GetReturnValue().Set(Audio::AudioEngine::NewInstance(info));
 } // end CreateEngine()
 */
 
 void InitAll(Handle<Object> target) {
     Audio::AudioEngine::Init( target );
 
-    NODE_SET_METHOD(target, "createAudioEngine", Audio::AudioEngine::NewInstance);
-    //NODE_SET_METHOD(target, "createAudioEngine", CreateEngine);
-    //target->Set( NanNew<String>("createAudioEngine"), CreateEngine);
-    //target->Set( NanNew<String>("createAudioEngine"), NanNew<FunctionTemplate>(CreateEngine)->GetFunction() );
-    //target->Set( NanNew<String>("createAudioEngine"), NanNew<FunctionTemplate>(Audio::AudioEngine::NewInstance)->GetFunction() );
+    Nan::SetMethod(target, "createAudioEngine", Audio::AudioEngine::NewInstance);
+    //Nan::SetMethod(target, "createAudioEngine", CreateEngine);
+    //target->Set( Nan::New<String>("createAudioEngine").ToLocalChecked(), CreateEngine);
+    //target->Set( Nan::New<String>("createAudioEngine").ToLocalChecked(), Nan::New<FunctionTemplate>(CreateEngine)->GetFunction() );
+    //target->Set( Nan::New<String>("createAudioEngine").ToLocalChecked(), Nan::New<FunctionTemplate>(Audio::AudioEngine::NewInstance)->GetFunction() );
     
-    target->Set( NanNew<String>("sampleFormatFloat32"), NanNew<Number>(1) );
-    target->Set( NanNew<String>("sampleFormatInt32"), NanNew<Number>(2) );
-    target->Set( NanNew<String>("sampleFormatInt24"), NanNew<Number>(4) );
-    target->Set( NanNew<String>("sampleFormatInt16"), NanNew<Number>(8) );
-    target->Set( NanNew<String>("sampleFormatInt8"), NanNew<Number>(10) );
-    target->Set( NanNew<String>("sampleFormatUInt8"), NanNew<Number>(20) );
+    target->Set( Nan::New<String>("sampleFormatFloat32").ToLocalChecked(), Nan::New<Number>(1) );
+    target->Set( Nan::New<String>("sampleFormatInt32").ToLocalChecked(), Nan::New<Number>(2) );
+    target->Set( Nan::New<String>("sampleFormatInt24").ToLocalChecked(), Nan::New<Number>(4) );
+    target->Set( Nan::New<String>("sampleFormatInt16").ToLocalChecked(), Nan::New<Number>(8) );
+    target->Set( Nan::New<String>("sampleFormatInt8").ToLocalChecked(), Nan::New<Number>(10) );
+    target->Set( Nan::New<String>("sampleFormatUInt8").ToLocalChecked(), Nan::New<Number>(20) );
 }
 
 NODE_MODULE( NodeCoreAudio, InitAll );
